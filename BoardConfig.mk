@@ -5,7 +5,10 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-# Architecture
+# For building with minimal manifest
+ALLOW_MISSING_DEPENDENCIES := true
+
+# Architecture 64bits
 TARGET_ARCH := arm64
 TARGET_ARCH_VARIANT := armv8-a
 TARGET_CPU_ABI := arm64-v8a
@@ -13,6 +16,7 @@ TARGET_CPU_ABI2 :=
 TARGET_CPU_VARIANT := generic
 TARGET_CPU_VARIANT_RUNTIME := kryo300
 
+# Architecture 32bits
 TARGET_2ND_ARCH := arm
 TARGET_2ND_ARCH_VARIANT := armv8-2a
 TARGET_2ND_CPU_ABI := armeabi-v7a
@@ -95,7 +99,7 @@ TARGET_USERIMAGES_USE_F2FS := true
 BOARD_SUPER_PARTITION_SIZE := 10292822016
 BOARD_SUPER_PARTITION_GROUPS := qti_dynamic_partitions
 BOARD_QTI_DYNAMIC_PARTITIONS_SIZE := 10288627712
-BOARD_QTI_DYNAMIC_PARTITIONS_PARTITION_LIST := system odm product vendor
+BOARD_QTI_DYNAMIC_PARTITIONS_PARTITION_LIST := system system_ext odm product vendor
 
 BOARD_SYSTEMIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_ODMIMAGE_FILE_SYSTEM_TYPE := ext4
@@ -116,31 +120,76 @@ RECOVERY_SDCARD_ON_DATA := true
 # Use mke2fs to create ext4 images
 TARGET_USES_MKE2FS := true
 
-# TWRP specific build flags
-TW_THEME := portrait_hdpi
-TW_SCREEN_BLANK_ON_BOOT := true
-TW_INPUT_BLACKLIST := "hbtp_vm"
+## TWRP specific build flags
+
+# Screen
 TW_BRIGHTNESS_PATH := "/sys/class/backlight/panel0-backlight/brightness"
+TW_INPUT_BLACKLIST := "hbtp_vm"
 TW_MAX_BRIGHTNESS := 486
 TW_DEFAULT_BRIGHTNESS := 128
-TW_CUSTOM_CPU_TEMP_PATH := "/sys/class/thermal/thermal_zone17/temp"
+TW_SCREEN_BLANK_ON_BOOT := true
+TW_FRAMERATE := 60
 TW_Y_OFFSET := 89
 TW_H_OFFSET := -89
-TW_NO_REBOOT_BOOTLOADER := true
-TW_HAS_DOWNLOAD_MODE := true
+TW_THEME := portrait_hdpi
+
+# TWRP Configs
+TW_CUSTOM_CPU_TEMP_PATH := "/sys/class/thermal/thermal_zone17/temp"
 TARGET_RECOVERY_QCOM_RTC_FIX := true
 TW_BACKUP_EXCLUSIONS := /data/fonts
 TW_EXTRA_LANGUAGES := true
-TW_EXCLUDE_DEFAULT_USB_INIT := true
 TW_INCLUDE_CRYPTO := false
 TW_NO_EXFAT_FUSE := true
+
+# TWRP reboot menu
+TW_NO_REBOOT_BOOTLOADER := false
+TW_HAS_DOWNLOAD_MODE := true
+
+# TWRP Tools
 TW_INCLUDE_NTFS_3G := true
 TW_INCLUDE_LPDUMP := true
 TW_INCLUDE_LPTOOLS := true
-TW_FRAMERATE := 120
+TW_INCLUDE_LIBRESETPROP := true
+TW_INCLUDE_RESETPROP := true
+TW_EXCLUDE_DEFAULT_USB_INIT := true
 
 # TWRP Configuration: Logd
 TWRP_INCLUDE_LOGCAT := true
 TARGET_USES_LOGD := true
-TW_INCLUDE_LIBRESETPROP := true
-TW_INCLUDE_RESETPROP := true
+
+## SHRP specific build flags
+SHRP_DEVICE_CODE := r8q
+SHRP_PATH := device/samsung/r8q
+SHRP_MAINTAINER := @skye_tachyon
+SHRP_REC_TYPE := SAR
+SHRP_DEVICE_TYPE := A_Only
+SHRP_REC := /dev/block/bootdevice/by-name/recovery
+SHRP_HAS_RECOVERY_PARTITION := true
+SHRP_EDL_MODE := 0
+SHRP_EXPRESS := true
+SHRP_EXPRESS_USE_DATA := true
+
+# SHRP Mount points
+SHRP_INTERNAL := /sdcard
+SHRP_EXTERNAL := /external_sd
+SHRP_OTG := /usb_otg
+
+# Flashlight (disabled)
+SHRP_FLASH := 0
+
+# SHRP notch config
+SHRP_NOTCH := true
+
+# SHRP Dark mode
+SHRP_DARK := true
+
+# Do not include the SHRP theming system (it's broken)
+SHRP_LITE := true
+
+# SHRP comes with a set of default addons.
+# This section disables all of them.
+SHRP_SKIP_DEFAULT_ADDON_1 := true
+SHRP_SKIP_DEFAULT_ADDON_2 := true
+SHRP_SKIP_DEFAULT_ADDON_3 := true
+SHRP_SKIP_DEFAULT_ADDON_4 := true
+SHRP_EXCLUDE_MAGISK_FLASH := true

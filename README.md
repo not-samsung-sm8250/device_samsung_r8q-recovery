@@ -1,4 +1,4 @@
-# TWRP Device Tree for Samsung Galaxy S20 FE 5G
+# SHRP-Reborn Device Tree for Samsung Galaxy S20 FE 5G (Based on Official TWRP tree)
 
 The Galaxy S20 FE 5G (codenamed _"r8q"_) is an flagship-range smartphone from Samsung.
 
@@ -10,7 +10,7 @@ There is also a 4G variant that is released with Android 11 in April 2021
 
 | Feature                        | Specification                                                                             |
 | -----------------------------: | :---------------------------------------------------------------------------------------- |
-| Chipset                        | Qualcomm SM8250 Snapdragon 865 5G                                                         |
+| Chipset                        | Qualcomm SM8250 Snapdragon 865 4G / 5G                                                    |
 | CPU                            | Octa-core (1x2.84 GHz Cortex-A77 & 3x2.42 GHz Cortex-A77 & 4x1.80 GHz Cortex-A55)         |
 | GPU                            | Qualcomm Adreno 650                                                                       |
 | Memory                         | 6GB / 8GB RAM (LPDDR5)                                                                    |
@@ -48,3 +48,63 @@ There is also a 4G variant that is released with Android 11 in April 2021
 # limitations under the License.
 #
 ```
+# Checks
+Blocking checks
+- [✔] Correct screen/recovery size
+- [✔] Working Touch, screen
+- [✔] Backup to internal/microSD
+- [✔] Restore from internal/microSD
+- [✔] reboot to system
+- [✔] ADB
+
+Medium checks
+- [✔] update.zip sideload
+- [✔] UI colors (red/blue inversions)
+- [✔] Screen goes off and on
+- [✔] F2FS/EXT4/EROFS Support, exFAT/NTFS where supported
+- [✔] all important partitions listed in mount/backup lists
+- [✔] backup/restore to/from external (USB-OTG) storage
+- [✖] decrypt /data
+- [✔] Correct date
+- [✔] USB-OTG (flash drive)
+
+Minor checks
+- [✖] MTP export
+- [✔] reboot to bootloader
+- [✔] reboot to recovery
+- [✔] poweroff
+- [✔] battery level
+- [✔] temperature
+- [✖] encrypted backups
+- [✔] input devices via USB (USB-OTG) - keyboard and mouse
+- [✖] USB mass storage export
+- [✔] set brightness
+- [✔] vibrate
+- [✔] screenshot
+- [✔] partition SD card
+- [✔] Fastbootd
+- [✖] Flashlight (Disabled)
+
+## Extremely simple instructions for building SHRP
+- Create a directory for SHRP source
+```
+mkdir shrp
+cd shrp
+```
+- Init & Sync Repo
+```
+repo init --depth=1 -u https://github.com/SHRP-Reborn/manifest.git -b shrp-12.1
+repo sync -c -j24 --force-sync --no-clone-bundle --no-tags --optimized-fetch --prune
+```
+- Clone the manifest needed for building for the S20 FE (r8q)
+```
+rm -rf ./device/samsung/r8q
+git clone https://github.com/skye-tachyon/android_device_samsung_r8q-shrp.git --depth=1 -b shrp-12.1 ./device/samsung/r8q
+```
+- Build
+```
+. build/envsetup.sh
+lunch twrp_r8q-eng
+mka recoveryimage
+```
+- Enjoy!!!
