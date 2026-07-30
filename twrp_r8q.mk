@@ -1,6 +1,7 @@
 #
 # Copyright (C) 2022 The Android Open Source Project
 # Copyright (C) 2022 The TWRP Open Source Project
+# Copyright (C) 2026 s-k-y.e
 #
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -40,3 +41,6 @@ DEVICE_PATH := device/$(PRODUCT_BRAND)/$(PRODUCT_DEVICE)
 
 # Inherit from hardware-specific part of the product configuration
 $(call inherit-product, device/$(PRODUCT_BRAND)/$(PRODUCT_DEVICE)/device.mk)
+
+# Inherit OrangeFox specifics
+$(call inherit-product, device/samsung/r8q/fox_r8q.mk)

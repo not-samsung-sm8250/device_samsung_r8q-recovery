@@ -1,4 +1,4 @@
-# TWRP Device Tree for Samsung Galaxy S20 FE 5G
+# OFOX Device Tree for Samsung Galaxy S20 FE 5G
 
 The Galaxy S20 FE 5G (codenamed _"r8q"_) is an flagship-range smartphone from Samsung.
 
@@ -10,7 +10,7 @@ There is also a 4G variant that is released with Android 11 in April 2021
 
 | Feature                        | Specification                                                                             |
 | -----------------------------: | :---------------------------------------------------------------------------------------- |
-| Chipset                        | Qualcomm SM8250 Snapdragon 865 5G                                                         |
+| Chipset                        | Qualcomm SM8250 Snapdragon 865 4G / 5G                                                    |
 | CPU                            | Octa-core (1x2.84 GHz Cortex-A77 & 3x2.42 GHz Cortex-A77 & 4x1.80 GHz Cortex-A55)         |
 | GPU                            | Qualcomm Adreno 650                                                                       |
 | Memory                         | 6GB / 8GB RAM (LPDDR5)                                                                    |
@@ -47,4 +47,30 @@ There is also a 4G variant that is released with Android 11 in April 2021
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+```
+
+## Copy-paste real quick
+```
+mkdir ~/OrangeFox_sync
+cd ~/OrangeFox_sync
+git clone https://gitlab.com/OrangeFox/sync.git
+cd ~/OrangeFox_sync/sync/
+./orangefox_sync.sh --branch 12.1 --path ~/fox_12.1
+cd ~/fox_12.1
+```
+
+```
+rm -rf device/samsung/r8q && git clone https://github.com/not-samsung-sm8250/device_samsung_r8q-recovery/ -b ofox-12.1 device/samsung/r8q --depth=1
+```
+
+```
+export ALLOW_MISSING_DEPENDENCIES=true
+export FOX_BUILD_DEVICE=r8q
+export LC_ALL="C"
+source build/envsetup.sh
+ulimit -n 16384
+```
+
+```
+lunch twrp_r8q-eng && mka adbd recoveryimage
 ```
