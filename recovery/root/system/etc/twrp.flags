@@ -16,7 +16,7 @@
 
 # ETC Mount Point
 /cache              ext4         /dev/block/bootdevice/by-name/cache
-/efs                ext4         /dev/block/bootdevice/by-name/efs               flags=display="EFS";backup=1
+/mnt/vendor/efs     ext4         /dev/block/bootdevice/by-name/efs               flags=display="EFS";backup=1
 /sec_efs            ext4         /dev/block/bootdevice/by-name/sec_efs           flags=display="Sec EFS";backup=1
 
 /omr		        ext4		/dev/block/bootdevice/by-name/omr		         flags=wipeingui;display="OMR"
