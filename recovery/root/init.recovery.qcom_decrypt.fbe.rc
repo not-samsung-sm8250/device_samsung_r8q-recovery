@@ -1,0 +1,39 @@
+on property:ro.crypto.state=encrypted && property:ro.crypto.type=file
+    install_keyring
+
+on property:vendor.sys.listeners.registered=true && property:orangefox.system.fingerprint=*
+    start gatekeeper_select
+
+on property:recovery.gatekeeper=qti
+    start gatekeeper-1-0-qti
+
+on property:recovery.gatekeeper=mdfpp
+    start gatekeeper-1-0
+
+on property:twrp.all.users.decrypted=true
+    setprop crypto.ready 0
+    stop qseecomd
+    stop gatekeeper-1-0
+    stop gatekeeper-1-0-qti
+    stop keymaster-4-0
+
+service gatekeeper_select /system/bin/sh /system/bin/gatekeeper_select.sh
+    user root
+    group root
+    oneshot
+    disabled
+    seclabel u:r:recovery:s0
+
+service gatekeeper-1-0 /system/bin/android.hardware.gatekeeper@1.0-service
+    user root
+    group root
+    setenv LD_LIBRARY_PATH /vendor/lib64:/vendor/lib:/system/lib64:/system/lib:/sbin
+    disabled
+    seclabel u:r:recovery:s0
+
+service gatekeeper-1-0-qti /system/bin/android.hardware.gatekeeper@1.0-service-qti
+    user root
+    group root
+    setenv LD_LIBRARY_PATH /vendor/lib64:/vendor/lib:/system/lib64:/system/lib:/sbin
+    disabled
+    seclabel u:r:recovery:s0

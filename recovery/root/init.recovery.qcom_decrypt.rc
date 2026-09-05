@@ -1,0 +1,50 @@
+import /init.recovery.qcom_decrypt.fbe.rc
+
+on fs
+    # Required by qseecomd
+    chmod 0660 /dev/qseecom
+    chown system drmrpc /dev/qseecom
+
+    chmod 0664 /dev/ion
+    chown system system /dev/ion
+
+on property:ro.crypto.state=encrypted && property:ro.boot.dynamic_partitions=true
+    start prepdecrypt
+
+on property:crypto.ready=1 && property:hwservicemanager.ready=true
+    start qseecomd
+
+on property:sys.listeners.registered=true && property:keymaster_ver=4.0
+    start keymaster-4-0
+
+on property:sys.listeners.registered=true && property:keymaster_ver=4.x
+    start keymaster-4-0
+
+on property:vendor.sys.listeners.registered=true && property:keymaster_ver=4.0
+    start keymaster-4-0
+
+on property:vendor.sys.listeners.registered=true && property:keymaster_ver=4.x
+    start keymaster-4-0
+
+service prepdecrypt /system/bin/prepdecrypt.sh
+    user root
+    group root
+    disabled
+    oneshot
+    seclabel u:r:recovery:s0
+
+service qseecomd /system/bin/qseecomd
+    user root
+    group root
+    setenv LD_LIBRARY_PATH /vendor/lib64:/vendor/lib:/system/lib64:/system/lib:/sbin
+    disabled
+    oneshot
+    seclabel u:r:recovery:s0
+
+service keymaster-4-0 /system/bin/android.hardware.keymaster@4.0-service
+    user root
+    group root
+    setenv LD_LIBRARY_PATH /vendor/lib64:/vendor/lib:/system/lib64:/system/lib:/sbin
+    disabled
+    oneshot
+    seclabel u:r:recovery:s0
